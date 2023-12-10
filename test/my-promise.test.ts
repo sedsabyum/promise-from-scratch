@@ -34,13 +34,13 @@ describe("MyPromise", () => {
   });
 
   it("Should support chaining then()", (done) => {
-    const p = new MyPromise((res: any) => {
+    const p = new MyPromise((res: (val: number) => void) => {
       setTimeout(() => {
         res(1);
       }, 10);
     });
 
-    p.then((val) => {
+    p.then((val: number) => {
       return val + 2;
     }).then((val) => {
       expect(val).to.equal(3);
@@ -64,7 +64,7 @@ describe("MyPromise", () => {
       .then(() => {
         check += 4;
       })
-      .catch((err) => {
+      .catch((err: any) => {
         expect(check).to.equal(3);
         expect(err.message).to.equal("Error occurred");
         done();
@@ -72,14 +72,14 @@ describe("MyPromise", () => {
   });
 
   it("Should resolve promises from the onResolve() function", (done) => {
-    const p = new MyPromise((res: any) => {
+    const p = new MyPromise((res: (val: number) => void) => {
       setTimeout(() => {
         res(1);
       }, 10);
     });
 
-    p.then((val) => {
-      return new MyPromise((res: any) => {
+    p.then((val: number) => {
+      return new MyPromise((res) => {
         res(val + 2);
       });
     }).then((val) => {
@@ -100,17 +100,20 @@ describe("MyPromise", () => {
     const p = MyPromise.reject("Rejection Reason");
     p.then(() => {
       done()
-    }).catch((err) => {
+    }).catch((err: any) => {
       expect(err).to.equal("Rejection Reason");
       done()
     });
   });
 
   it("Should resolve array of promises", (done) => {
-    const promises = [
+    const promises: MyPromise<any>[] = [
+      MyPromise.resolve("Resolved value"),
+      MyPromise.resolve(22),
       new MyPromise(() => {}),
-      new MyPromise(() => {}),
-      new MyPromise(() => {}),
+      new MyPromise((res) => {
+        res("Another resolved value")
+      }),
     ];
     const resolvedPromises = MyPromise.all(promises);
     done()

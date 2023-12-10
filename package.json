@@ -4,7 +4,7 @@
   "description": "",
   "main": "use-cases.ts",
   "scripts": {
-    "build": "npx tsc",
+    "build": "rimraf dist && npx tsc",
     "test": "cd dist && npx mocha"
   },
   "keywords": [],
@@ -20,5 +20,8 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "rimraf": "^5.0.5"
+  }
 }
